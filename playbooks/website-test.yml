@@ -41,4 +41,14 @@
         - apache_enabled.stdout == 'enabled'
       fail_msg: "apache2 service is not enabled!"
       success_msg: "apache2 service is enabled"
-
+  - name: Stat index.html
+    stat:
+      path: /var/www/html/index.html
+    register: a
+  - name: Confirm that index.html exist & owned by root
+    assert:
+      that: 
+        - "a.stat.exists"
+        - "a.stat.pw_name == 'root'"
+      fail_msg: "index.html may not exist or have corrert ownership!"
+      success_msg: "index.html exist with proper ownership"
